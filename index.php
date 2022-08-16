@@ -1,68 +1,69 @@
 <?php
-define("URL", 
-        str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? 'https' : 'http')."://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]"));
 
-if (isset($_GET['q'])){
-  // VARIABLE
-  $shortcut = htmlspecialchars($_GET['q']);
+  define("URL", 
+          str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? 'https' : 'http')."://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]"));
 
-  // CONNEXION A LA BDD
-  $bdd = new PDO('mysql:host=localhost;dbname=bitly;charset=utf8','root','admin');
-  $req = $bdd->prepare('SELECT COUNT(*) AS x
-                        FROM links WHERE shortcut = ? ');
-  $req->execute([$shortcut]);
+  if (isset($_GET['q'])){
+    // VARIABLE
+    $shortcut = htmlspecialchars($_GET['q']);
 
-  // SI L'ADRESSE N'EXISTE PAS => ERREUR
-  while ($result = $req->fetch()){
-    if($result['x'] != 1 ){
-      header('location: ./?error=true&message=Adresse url non connue!');
+    // CONNEXION A LA BDD
+    $bdd = new PDO('mysql:host=localhost;dbname=bitly;charset=utf8','root','admin');
+    $req = $bdd->prepare('SELECT COUNT(*) AS x
+                          FROM links WHERE shortcut = ? ');
+    $req->execute([$shortcut]);
+
+    // SI L'ADRESSE N'EXISTE PAS => ERREUR
+    while ($result = $req->fetch()){
+      if($result['x'] != 1 ){
+        header('location: ./?error=true&message=Adresse url non connue!');
+        exit();
+      }
+    }
+
+    //REDIRECTION VERS LA VRAIE ADRESSE
+    $req = $bdd->prepare('SELECT * FROM links WHERE shortcut = ?');
+    $req->execute([$shortcut]);
+    while ($result = $req->fetch()){
+      header('location: '.$result['url']);
       exit();
     }
+
   }
 
-  //REDIRECTION VERS LA VRAIE ADRESSE
-  $req = $bdd->prepare('SELECT * FROM links WHERE shortcut = ?');
-  $req->execute([$shortcut]);
-  while ($result = $req->fetch()){
-    header('location: '.$result['url']);
-    exit();
-  }
 
-}
+  if(isset($_POST['url']) && !empty($_POST['url'])){
 
-
-if(isset($_POST['url']) && !empty($_POST['url'])){
-
-  // VARIABLE
-  $url = $_POST['url'];
-  
-  // VERIFICATION SI URL VALIDE
-  if(!filter_var($url, FILTER_VALIDATE_URL)){
-    header('location: ./?error=true&message=Url non valide');
-    exit();
-  }
-
-  //  CREATION DU RACCOURCI
-  $shortcut = crypt($url, rand());
-
-  //  VERIF SI URL EXISTE DEJA EN BDD
-  $bdd = new PDO('mysql:host=localhost;dbname=bitly;charset=utf8', 'root', 'admin');
-  $req = $bdd->prepare('SELECT COUNT(*) AS x
-                        FROM links WHERE url = ? ');
-  $req->execute([$url]);
-  while ($result = $req->fetch()){
-    if($result['x'] != 0 ){
-      header('location: ./?error=true&message=Adresse déjà raccourcie !');
+    // VARIABLE
+    $url = $_POST['url'];
+    
+    // VERIFICATION SI URL VALIDE
+    if(!filter_var($url, FILTER_VALIDATE_URL)){
+      header('location: ./?error=true&message=Url non valide');
       exit();
     }
-  }
 
-  //  AFFICHAGE
-  $req = $bdd->prepare('INSERT INTO links (url, shortcut) VALUES (?, ?)');
-  $req->execute([$url, $shortcut]);
-  header('location: ./?short='.$shortcut);
-  exit();
-}
+    //  CREATION DU RACCOURCI
+    $shortcut = crypt($url, rand());
+
+    //  VERIF SI URL EXISTE DEJA EN BDD
+    $bdd = new PDO('mysql:host=localhost;dbname=bitly;charset=utf8', 'root', 'admin');
+    $req = $bdd->prepare('SELECT COUNT(*) AS x
+                          FROM links WHERE url = ? ');
+    $req->execute([$url]);
+    while ($result = $req->fetch()){
+      if($result['x'] != 0 ){
+        header('location: ./?error=true&message=Adresse déjà raccourcie !');
+        exit();
+      }
+    }
+
+    //  AFFICHAGE
+    $req = $bdd->prepare('INSERT INTO links (url, shortcut) VALUES (?, ?)');
+    $req->execute([$url, $shortcut]);
+    header('location: ./?short='.$shortcut);
+    exit();
+  }
 
 ?>
 
@@ -86,7 +87,7 @@ if(isset($_POST['url']) && !empty($_POST['url'])){
         <!-- LOGO -->
         <img src="pictures/logo.png" alt="logo" id="logo">
       </header>
-      <h1>Une url longue ? Raccourcissez la !</h1>
+      <h1>Une url trop longue ? Raccourcissez la !</h1>
       <h2>Largement meilleur et plus court que les autres.</h2>
 
       <!-- FORMULAIRE -->
