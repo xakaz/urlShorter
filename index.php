@@ -1,4 +1,6 @@
 <?php
+define("URL", 
+        str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? 'https' : 'http')."://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]"));
 
 if (isset($_GET['q'])){
   // VARIABLE
@@ -102,7 +104,7 @@ if(isset($_POST['url']) && !empty($_POST['url'])){
         <?php } else if (isset($_GET['short'])) { ?>
           <div class="center">
             <div id="result">
-              <b>URL RACCOURCIE : http://localhost/bdd/urlShorter/?q=<?= htmlspecialchars($_GET['short']) ?></b>
+              <b>URL RACCOURCIE : <?= URL ?>?q=<?= htmlspecialchars($_GET['short']) ?></b>
             </div>
           </div>
       <?php }?>
