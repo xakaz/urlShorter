@@ -30,3 +30,5 @@ Le logo du header renvoie à la page "index.php" sans donnée "GET" dans l'url
   * Nom de la table : links
   * Noms des colonnes : id, url, shortcut
 
+  Fichier "url_shorter.sql" à importer dans PHPMyAdmin.
+
