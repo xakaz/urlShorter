@@ -1,41 +1,5 @@
-<?php
+<?php require_once("./database.php") ?>
 
-if (isset($_POST['url']) && !empty($_POST['url'])) {
-  $url = $_POST['url'];
-  $shortcut = crypt($url, "shorty");
-
-  // VERIFIE L'URL
-  if (!filter_var($url, FILTER_VALIDATE_URL)) {
-    header('location: ./?error=true&message=Adresse url non valide');
-    exit();
-  }
-
-  // CONNEXION BASE DE DONNEES 
-  try {
-    $db = new PDO('mysql:host=localhost;dbname=url_shorter;charset=utf8', 'root', '');
-  } catch (Exception $e) {
-    echo $e->getMessage();
-  }
-
-  // REQUETE BASE DE DONNEES - URL EXISTANTE 
-  $req = $db->prepare("SELECT COUNT(*) AS x FROM links WHERE url = ?");
-  $req->execute([$url]);
-  $result = $req->fetch();
-  if ($result[0] != 0) {
-    header('location: ./?error=true&message=Url déjà utilisée');
-    exit();
-  }
-  // $req->closeCursor();
-
-  // ENVOI EN DBBASE DE DONNEES 
-  $req = $db->prepare("INSERT INTO links(url, shortcut) VALUES ( ?, ?)");
-  $req->execute([$url, $shorcut]);
-  header('location: ./?short=' . $shortcut);
-  exit();
-  // $req->closeCursor();
-}
-
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -74,6 +38,13 @@ if (isset($_POST['url']) && !empty($_POST['url'])) {
         <div class="center">
           <div id="result">
             <b><?= htmlspecialchars($_GET['message']) ?></b>
+          </div>
+        </div>
+      <?php } else if (isset($_GET['short'])) { ?>
+        <div class="center">
+          <div id="result">
+            <b>URL RACCOURCIE :</b>
+            http://localhost/urlShorter/?q=<?= htmlspecialchars($_GET['short']) ?>
           </div>
         </div>
       <?php } ?>
