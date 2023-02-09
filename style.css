@@ -1,30 +1,127 @@
-*, ::before, ::after {
+*,
+::before,
+::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-body{
-  font-family: Arial, Helvetica, sans-serif;
+body {
+  font-family: 'Quicksand', sans-serif;
 }
 
 header {
   padding: 30px;
 }
 
-#hello{
+h1 {
+  color: rgb(255, 255, 255);
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+
+h3 {
+  color: #ee6123;
+  text-transform: uppercase;
+  padding-bottom: 30px;
+  font-weight: 400;
+}
+
+button,
+input {
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+  padding: 17px 30px;
+  font-size: 1.3em;
+  border: none;
+}
+
+input {
+  width: 50%;
+}
+
+button {
+  cursor: pointer;
+  background: #ee6123;
+  color: white;
+  font-weight: 600;
+}
+
+form {
+  text-align: center;
+  margin-top: 30px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+}
+
+footer img {
+  margin-bottom: 15px;
+}
+
+footer p {
+  margin: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #ee6123;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+a:hover{
+  color:#000000
+}
+
+#hello {
   background: rgba(56, 58, 85, 0.8) url("pix/bg.jpg");
   background-blend-mode: darken;
   background-size: cover;
   height: 500px;
 }
 
-#logo {
+#brands {
+  background: #eff7fc;
+  padding: 30px;
+  text-align: center;
+}
+
+#result{
+  text-align: center;
+  color: white;
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 30px;
+  display: inline-block;
+  margin: 15px;
+  background: rgba(0,0,0,0.3);
+}
+
+.center {
+  text-align: center;
+}
+
+.logo {
   height: 80px;
   width: auto;
 }
 
-.container{
-  width: 1000px;
-  margin: auto;
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
 }
+
+.picture {
+  height: 50px;
+  width: auto;
+  border-radius: 5px;
+  margin: 15px 30px;
+}
+
