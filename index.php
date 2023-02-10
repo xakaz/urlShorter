@@ -1,4 +1,7 @@
-<?php require_once("./database.php") ?>
+<?php
+require_once("./DataBase/getRequest.php");
+require_once("./DataBase/postRequest.php");
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -44,7 +47,7 @@
         <div class="center">
           <div id="result">
             <b>URL RACCOURCIE :</b>
-            http://localhost/urlShorter/?q=<?= htmlspecialchars($_GET['short']) ?>
+            <?= URL.htmlspecialchars($_GET['short']) ?>
           </div>
         </div>
       <?php } ?>
